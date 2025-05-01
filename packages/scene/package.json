@@ -41,7 +41,8 @@
   "license": "MIT",
   "packageManager": "pnpm@10.9.0",
   "dependencies": {
-    "nanoid": "^5.1.5",
-    "@silwalanish/engine": "workspace:*"
+    "@silwalanish/engine": "workspace:*",
+    "gl-matrix": "^3.4.3",
+    "nanoid": "^5.1.5"
   }
 }

@@ -9,11 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@silwalanish/geometry": "workspace:*",
     "@silwalanish/planet": "workspace:*",
     "@silwalanish/renderer": "workspace:*",
     "@silwalanish/scene": "workspace:*",
     "@silwalanish/shader": "workspace:*",
-    "@silwalanish/geometry": "workspace:*"
+    "gl-matrix": "^3.4.3"
   },
   "devDependencies": {
     "@silwalanish/tsconfig": "workspace:*",
