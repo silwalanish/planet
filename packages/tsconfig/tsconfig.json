@@ -1,0 +1,17 @@
+{
+  "extends": ["@tsconfig/strictest/tsconfig.json"],
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2022",
+
+    "skipLibCheck": true,
+    "useDefineForClassFields": true,
+    "sourceMap": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "strict": true
+  }
+}

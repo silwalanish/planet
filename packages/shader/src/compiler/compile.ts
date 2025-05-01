@@ -1,0 +1,48 @@
+import { createShader } from "./shader";
+import { createProgram } from "./program";
+
+export interface ShaderSpecs {
+  vertexShaderSource: string;
+  fragmentShaderSource: string;
+}
+
+function _cleanUp(
+  gl: WebGL2RenderingContext,
+  program: WebGLProgram | null,
+  shader: WebGLShader | null
+) {
+  if (shader) {
+    if (program) {
+      gl.detachShader(program, shader);
+    }
+    gl.deleteShader(shader);
+  }
+}
+
+export function compile(
+  gl: WebGL2RenderingContext,
+  specs: ShaderSpecs
+): WebGLProgram {
+  let vertexShader: WebGLShader | null = null;
+  let fragmentShader: WebGLShader | null = null;
+  let program: WebGLProgram | null = null;
+  try {
+    vertexShader = createShader(gl, gl.VERTEX_SHADER, specs.vertexShaderSource);
+
+    fragmentShader = createShader(
+      gl,
+      gl.FRAGMENT_SHADER,
+      specs.fragmentShaderSource
+    );
+
+    program = createProgram(gl, {
+      vertexShader,
+      fragmentShader,
+    });
+  } finally {
+    _cleanUp(gl, program, vertexShader);
+    _cleanUp(gl, program, fragmentShader);
+  }
+
+  return program;
+}

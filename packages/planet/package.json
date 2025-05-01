@@ -1,0 +1,49 @@
+{
+  "name": "@silwalanish/planet",
+  "version": "0.0.1",
+  "description": "A package to generate planets procedurally.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/types/index.d.ts",
+      "development": "./src/index.ts"
+    },
+    "./*": {
+      "import": "./dist/*.js",
+      "types": "./dist/types/*.d.ts",
+      "development": "./src/*.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "tsc --build --clean",
+    "dev": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "typescript",
+    "planet"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+github.com:silwalanish/planet.git"
+  },
+  "dependencies": {
+    "@silwalanish/engine": "workspace:*",
+    "@silwalanish/shader": "workspace:*",
+    "gl-matrix": "^3.4.3",
+    "nanoid": "^5.1.5"
+  },
+  "devDependencies": {
+    "@silwalanish/tsconfig": "workspace:*",
+    "@types/node": "^22.15.2",
+    "typescript": "^5.8.3"
+  },
+  "author": "Anish Silwal Khatri<silwalanish@gmail.com>",
+  "license": "MIT",
+  "packageManager": "pnpm@10.9.0"
+}

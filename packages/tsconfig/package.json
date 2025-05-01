@@ -1,0 +1,23 @@
+{
+  "name": "@silwalanish/tsconfig",
+  "version": "0.0.1",
+  "description": "A package for tsconfig used in the monorepo.",
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "typescript",
+    "planet"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+github.com:silwalanish/planet.git"
+  },
+  "author": "Anish Silwal Khatri<silwalanish@gmail.com>",
+  "license": "MIT",
+  "packageManager": "pnpm@10.9.0",
+  "devDependencies": {
+    "@tsconfig/strictest": "^2.0.5"
+  }
+}

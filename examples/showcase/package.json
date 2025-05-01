@@ -1,0 +1,24 @@
+{
+  "name": "showcase",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "NODE_ENV=developement vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@silwalanish/planet": "workspace:*",
+    "@silwalanish/renderer": "workspace:*",
+    "@silwalanish/scene": "workspace:*",
+    "@silwalanish/shader": "workspace:*",
+    "@silwalanish/geometry": "workspace:*"
+  },
+  "devDependencies": {
+    "@silwalanish/tsconfig": "workspace:*",
+    "@types/three": "^0.176.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.3.1"
+  }
+}
