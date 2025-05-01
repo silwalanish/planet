@@ -21,25 +21,49 @@ export class CanvasSurface {
     }
 
     this._resizeObserver = new ResizeObserver(this._handleResize.bind(this));
-    this._resizeObserver.observe(this._canvas, {
-      box: "device-pixel-content-box",
-    });
+
+    try {
+      this._resizeObserver.observe(this._canvas, {
+        box: "device-pixel-content-box",
+      });
+    } catch (error) {
+      this._resizeObserver.observe(this._canvas, {
+        box: "content-box",
+      });
+    }
   }
 
   private _handleResize(entries: ResizeObserverEntry[]) {
     for (const entry of entries) {
-      if (entry.devicePixelContentBoxSize[0]) {
-        let width = entry.devicePixelContentBoxSize[0].inlineSize;
-        let height = entry.devicePixelContentBoxSize[0].blockSize;
+      let width: number;
+      let height: number;
+      let dpr = window.devicePixelRatio;
 
-        if (this._specs.autoResize) {
-          this._canvas.width = width;
-          this._canvas.height = height;
-        }
+      if (
+        entry.devicePixelContentBoxSize &&
+        entry.devicePixelContentBoxSize[0]
+      ) {
+        width = entry.devicePixelContentBoxSize[0].inlineSize;
+        height = entry.devicePixelContentBoxSize[0].blockSize;
+        dpr = 1;
+      } else if (entry.contentBoxSize && entry.contentBoxSize[0]) {
+        width = entry.contentBoxSize[0].inlineSize;
+        height = entry.contentBoxSize[0].blockSize;
+      } else {
+        width = entry.contentRect.width;
+        height = entry.contentRect.height;
+      }
 
-        if (this._specs.onResize) {
-          this._specs.onResize(width, height);
-        }
+      width = Math.round(width * dpr);
+      height = Math.round(height * dpr);
+
+      if (this._specs.autoResize) {
+        this._canvas.width = width;
+        this._canvas.height = height;
+      }
+
+      if (this._specs.onResize) {
+        this._specs.onResize(width, height);
       }
     }
   }
