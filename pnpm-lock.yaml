@@ -85,15 +85,24 @@ importers:
       '@silwalanish/engine':
         specifier: workspace:*
         version: link:../engine
+      '@silwalanish/scene':
+        specifier: workspace:*
+        version: link:../scene
       '@silwalanish/shader':
         specifier: workspace:*
         version: link:../shader
+      alea:
+        specifier: ^1.0.1
+        version: 1.0.1
       gl-matrix:
         specifier: ^3.4.3
         version: 3.4.3
       nanoid:
         specifier: ^5.1.5
         version: 5.1.5
+      simplex-noise:
+        specifier: ^4.0.3
+        version: 4.0.3
     devDependencies:
       '@silwalanish/tsconfig':
         specifier: workspace:*
@@ -468,6 +477,9 @@ packages:
   '@webgpu/types@0.1.60':
     resolution: {integrity: sha512-8B/tdfRFKdrnejqmvq95ogp8tf52oZ51p3f4QD5m5Paey/qlX4Rhhy5Y8tgFMi7Ms70HzcMMw3EQjH/jdhTwlA==}
 
+  alea@1.0.1:
+    resolution: {integrity: sha512-QU+wv+ziDXaMxRdsQg/aH7sVfWdhKps5YP97IIwFkHCsbDZA3k87JXoZ5/iuemf4ntytzIWeScrRpae8+lDrXA==}
+
   ansi-regex@4.1.1:
     resolution: {integrity: sha512-ILlv4k/3f6vfQ4OoP2AGvirOktlQ98ZEL1k9FaQjxa3L1abBgbuTDAdPOpvbGncC0BTVQrl+OM8xZGK6tWXt7g==}
     engines: {node: '>=6'}
@@ -706,6 +718,9 @@ packages:
   shell-quote@1.8.2:
     resolution: {integrity: sha512-AzqKpGKjrj7EM6rKVQEPpB288oCfnrEIuyoT9cyF4nmGa7V8Zk6f7RRqYisX8X9m+Q7bd632aZW4ky7EhbQztA==}
     engines: {node: '>= 0.4'}
+
+  simplex-noise@4.0.3:
+    resolution: {integrity: sha512-qSE2I4AngLQG7BXqoZj51jokT4WUXe8mOBrvfOXpci8+6Yu44+/dD5zqDpOx3Ux792eamTd2lLcI8jqFntk/lg==}
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -1000,6 +1015,8 @@ snapshots:
 
   '@webgpu/types@0.1.60': {}
 
+  alea@1.0.1: {}
+
   ansi-regex@4.1.1: {}
 
   ansi-regex@5.0.1: {}
@@ -1246,6 +1263,8 @@ snapshots:
   set-blocking@2.0.0: {}
 
   shell-quote@1.8.2: {}
+
+  simplex-noise@4.0.3: {}
 
   source-map-js@1.2.1: {}
 

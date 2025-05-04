@@ -1,5 +1,11 @@
 import { mat4 } from "gl-matrix";
-import { GameObject, Mesh, Projection, Scene } from "@silwalanish/engine";
+import {
+  GameObject,
+  Mesh,
+  Projection,
+  Scene,
+  Transform,
+} from "@silwalanish/engine";
 
 import { RenderBuffer } from "./renderbuffer";
 import { CanvasSurface } from "../surface/canvassurface";
@@ -16,6 +22,7 @@ export class Renderer {
   private _surface: CanvasSurface;
   private _viewport: Viewport;
   private _renderObjects: { [key: string]: RenderBuffer };
+  private _renderedBuffers: string[];
 
   public constructor(surface: CanvasSurface) {
     this._surface = surface;
@@ -36,6 +43,7 @@ export class Renderer {
 
     this._gl = gl;
     this._renderObjects = {};
+    this._renderedBuffers = [];
   }
 
   public get viewport() {
@@ -59,6 +67,8 @@ export class Renderer {
       this._viewport.width,
       this._viewport.height
     );
+
+    this._renderedBuffers = [];
   }
 
   private _prepareRenderBuffer(mesh: Mesh): RenderBuffer {
@@ -96,6 +106,40 @@ export class Renderer {
     return this._renderObjects[mesh.geometry.id] as RenderBuffer;
   }
 
+  private _cleanupUnusedBuffers() {
+    Object.keys(this._renderObjects).forEach((meshId: string) => {
+      if (!this._renderedBuffers.includes(meshId)) {
+        this._renderObjects[meshId]?.destroy(this._gl);
+
+        delete this._renderObjects[meshId];
+      }
+    });
+  }
+
+  private _renderMesh(
+    mesh: Mesh,
+    transform: Transform,
+    projectionMatrix: mat4,
+    viewMatrix: mat4
+  ) {
+    mesh.material.use(this._gl);
+    mesh.material.setProjectionMatrix(this._gl, projectionMatrix);
+    mesh.material.setViewMatrix(this._gl, viewMatrix);
+
+    const modelMatrix = mat4.create();
+    mat4.multiply(
+      modelMatrix,
+      transform.getWorldMatrix(),
+      transform.getLocalMatrix()
+    );
+    mesh.material.setModelMatrix(this._gl, modelMatrix);
+
+    const buffer = this._prepareRenderBuffer(mesh);
+    buffer.render(this._gl);
+
+    this._renderedBuffers.push(mesh.geometry.id);
+  }
+
   public render(scene: Scene, projection: Projection) {
     this._clear();
 
@@ -111,28 +155,19 @@ export class Renderer {
       const gameObject = gameObjects.pop() as GameObject;
 
       if (gameObject.mesh) {
-        gameObject.mesh.material.use(this._gl);
-        gameObject.mesh.material.setProjectionMatrix(
-          this._gl,
-          projectionMatrix
+        this._renderMesh(
+          gameObject.mesh,
+          gameObject.transform,
+          projectionMatrix,
+          viewMatrix
         );
-        gameObject.mesh.material.setViewMatrix(this._gl, viewMatrix);
-
-        const modelMatrix = mat4.create();
-        mat4.multiply(
-          modelMatrix,
-          gameObject.transform.getWorldMatrix(),
-          gameObject.transform.getLocalMatrix()
-        );
-        gameObject.mesh.material.setModelMatrix(this._gl, modelMatrix);
-
-        const buffer = this._prepareRenderBuffer(gameObject.mesh);
-        buffer.render(this._gl);
       }
 
       for (const child of gameObject.children) {
         gameObjects.push(child);
       }
     }
+
+    this._cleanupUnusedBuffers();
   }
 }

@@ -11,7 +11,7 @@ export class SceneNode implements GameObject {
   private _children: GameObject[];
   private _parent: GameObject | null;
 
-  constructor(name: string, id?: string) {
+  public constructor(name: string, id?: string) {
     this._id = id || nanoid();
     this._name = name;
     this._children = [];
@@ -65,7 +65,7 @@ export class SceneNode implements GameObject {
     });
   }
 
-  public addChild(child: SceneNode) {
+  public addChild(child: GameObject) {
     if (child.parent) {
       child.parent.removeChild(child);
     }
@@ -74,7 +74,7 @@ export class SceneNode implements GameObject {
     this.children.push(child);
   }
 
-  public removeChild(child: SceneNode) {
+  public removeChild(child: GameObject) {
     const index = this.children.indexOf(child);
 
     if (index != -1) {

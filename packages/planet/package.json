@@ -37,9 +37,12 @@
   },
   "dependencies": {
     "@silwalanish/engine": "workspace:*",
+    "@silwalanish/scene": "workspace:*",
     "@silwalanish/shader": "workspace:*",
+    "alea": "^1.0.1",
     "gl-matrix": "^3.4.3",
-    "nanoid": "^5.1.5"
+    "nanoid": "^5.1.5",
+    "simplex-noise": "^4.0.3"
   },
   "devDependencies": {
     "@silwalanish/tsconfig": "workspace:*",

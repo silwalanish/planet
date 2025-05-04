@@ -26,6 +26,29 @@ export class RenderBuffer {
     }
   }
 
+  public destroy(gl: WebGL2RenderingContext): void {
+    if (this._vao) {
+      gl.deleteVertexArray(this._vao);
+      this._vao = null;
+    }
+    if (this._vbo) {
+      gl.deleteBuffer(this._vbo);
+      this._vbo = null;
+    }
+    if (this._nbo) {
+      gl.deleteBuffer(this._nbo);
+      this._nbo = null;
+    }
+    if (this._ubo) {
+      gl.deleteBuffer(this._ubo);
+      this._ubo = null;
+    }
+    if (this._ibo) {
+      gl.deleteBuffer(this._ibo);
+      this._ibo = null;
+    }
+  }
+
   public bind(gl: WebGL2RenderingContext): void {
     if (!this._vao) {
       throw new Error("Buffer not created");
