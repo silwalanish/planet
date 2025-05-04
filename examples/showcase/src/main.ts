@@ -13,5 +13,13 @@ window.addEventListener("DOMContentLoaded", () => {
   element.appendChild(app.domElement);
   window.requestAnimationFrame(() => app.loop());
 
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      app.resume();
+    } else {
+      app.pause();
+    }
+  });
+
   (window as any).app = app;
 });

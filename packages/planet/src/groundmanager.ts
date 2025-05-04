@@ -5,12 +5,14 @@ import { Ground } from "./ground";
 import { PlanetMaterial } from "./material";
 
 export class GroundManager extends SceneNode {
+  private _camera: SceneNode;
   private _planetMaterial: PlanetMaterial;
   private _offset: number;
 
-  public constructor() {
+  public constructor(camera: SceneNode) {
     super("groundManager");
 
+    this._camera = camera;
     this._planetMaterial = new PlanetMaterial(
       "planetMaterial",
       vec4.fromValues(86 / 255, 125 / 255, 70 / 255, 1),
@@ -47,14 +49,15 @@ export class GroundManager extends SceneNode {
   public override update(deltaTime: number): void {
     super.update(deltaTime);
 
-    this.children.forEach((child) => {
-      child.transform.Position[0] -= 10.0 * deltaTime;
+    let cameraX = Math.ceil(this._camera.transform.Position[0]);
 
-      if (child.transform.Position[0] <= -50) {
-        this.removeChild(child);
+    const offScreenChildren = this.children.filter((children) => {
+      return cameraX - children.transform.Position[0] > 50;
+    });
 
-        this._spawnGround();
-      }
+    offScreenChildren.forEach((children) => {
+      this.removeChild(children);
+      this._spawnGround();
     });
   }
 }

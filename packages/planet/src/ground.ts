@@ -78,7 +78,7 @@ export class Ground implements Geometry {
         const v = j / (segmentsY - 1);
 
         if (j === segmentsY - 1) {
-          y += fbm(u + this._offset[0], 1.0, this._noise, 6, 0.5, 2.0) * 15;
+          y += fbm(u + this._offset[0], 1.0, this._noise, 3, 0.5, 2.0) * 15;
         }
 
         this._vertices.push(vec3.fromValues(x, y, z));

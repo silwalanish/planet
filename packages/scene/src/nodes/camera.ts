@@ -14,11 +14,11 @@ export class Camera extends SceneNode implements View {
     this._viewMatrix = mat4.create();
   }
 
-  public lookAt(pointInWorld: vec3): void {
+  public lookAt(direction: vec3): void {
     mat4.lookAt(
       this._viewMatrix,
       this.transform.getWorldPosition(),
-      pointInWorld,
+      vec3.add(vec3.create(), this.transform.getWorldPosition(), direction),
       UP
     );
   }
