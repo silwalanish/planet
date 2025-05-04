@@ -1,7 +1,7 @@
-import { createShader } from "./shader";
 import { createProgram } from "./program";
+import { createShader, ShaderType } from "./shader";
 
-export interface ShaderSpecs {
+export interface ShaderCompilationSpecs {
   vertexShaderSource: string;
   fragmentShaderSource: string;
 }
@@ -21,17 +21,21 @@ function _cleanUp(
 
 export function compile(
   gl: WebGL2RenderingContext,
-  specs: ShaderSpecs
+  specs: ShaderCompilationSpecs
 ): WebGLProgram {
   let vertexShader: WebGLShader | null = null;
   let fragmentShader: WebGLShader | null = null;
   let program: WebGLProgram | null = null;
   try {
-    vertexShader = createShader(gl, gl.VERTEX_SHADER, specs.vertexShaderSource);
+    vertexShader = createShader(
+      gl,
+      ShaderType.Vertex,
+      specs.vertexShaderSource
+    );
 
     fragmentShader = createShader(
       gl,
-      gl.FRAGMENT_SHADER,
+      ShaderType.Fragment,
       specs.fragmentShaderSource
     );
 

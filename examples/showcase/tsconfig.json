@@ -15,6 +15,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "allowArbitraryExtensions": true,
+    "types": [
+      "@silwalanish/tsconfig",
+    ]
   },
   "include": ["src"]
 }

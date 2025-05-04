@@ -20,7 +20,9 @@ export class Renderer {
   public constructor(surface: CanvasSurface) {
     this._surface = surface;
 
-    let gl = this._surface.domElement.getContext("webgl2");
+    let gl = this._surface.domElement.getContext("webgl2", {
+      antialias: true,
+    });
     if (!gl) {
       throw new Error("WebGL not supported");
     }

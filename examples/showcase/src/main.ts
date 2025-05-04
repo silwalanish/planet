@@ -1,8 +1,8 @@
 import "./app.css";
 
 import { vec3, vec4 } from "gl-matrix";
-import { Planet, PlanetMaterial } from "@silwalanish/planet";
 import { BasicMaterial } from "@silwalanish/shader";
+import { PlanetMaterial } from "@silwalanish/planet";
 import {
   CanvasSurface,
   Orthographic,
@@ -23,6 +23,7 @@ class App {
   private _renderer: Renderer;
   private _scene: SceneGraph;
   private _perspective: Perspective;
+  private _planetMaterial: PlanetMaterial;
   private _orthographic: Orthographic;
 
   public constructor() {
@@ -34,7 +35,12 @@ class App {
 
     this._scene = new SceneGraph();
     this._perspective = new Perspective(90, 1.33, 0.01, 1000);
-    this._orthographic = new Orthographic(-50, 50, -5, 20, 0.01, 1000);
+    this._orthographic = new Orthographic(-50, 50, -50, 50, 0.01, 1000);
+    this._planetMaterial = new PlanetMaterial(
+      "planetMaterial",
+      vec4.fromValues(86 / 255, 125 / 255, 70 / 255, 1),
+      vec4.fromValues(146 / 255, 116 / 255, 91 / 255, 1)
+    );
 
     this._lastTime = Date.now();
   }
@@ -55,22 +61,15 @@ class App {
 
     const sky = new SceneNode("sky");
     sky.mesh = new MeshComponent(
-      new Plane(100, 30),
+      new Plane(100, 100),
       new BasicMaterial("skyMaterial", vec4.fromValues(0.5, 0.7, 1, 1))
     );
-    sky.transform.Position = vec3.fromValues(0, 5, -5);
+    sky.transform.Position = vec3.fromValues(0, 0, -1);
     this._scene.addNode(sky);
 
     const planet = new SceneNode("planet");
-    planet.mesh = new MeshComponent(
-      new Planet(),
-      new PlanetMaterial(
-        "planetMaterial",
-        vec4.fromValues(86 / 255, 125 / 255, 70 / 255, 1),
-        vec4.fromValues(146 / 255, 116 / 255, 91 / 255, 1),
-        vec4.fromValues(0.1, 0.1, 0.1, 1)
-      )
-    );
+    planet.mesh = new MeshComponent(new Plane(100, 10), this._planetMaterial);
+    planet.transform.Position = vec3.fromValues(0, -22.5, 0);
     this._scene.addNode(planet);
   }
 

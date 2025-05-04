@@ -19,9 +19,12 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && pnpm copy-glsl",
     "clean": "tsc --build --clean",
-    "dev": "tsc --watch",
+    "watch:tsc": "tsc --watch",
+    "watch:glsl": "chokidar \"src/**/*.glsl\" -c \"pnpm copy-glsl\"",
+    "dev": "concurrently \"pnpm watch:tsc\" \"pnpm watch:glsl\"",
+    "copy-glsl": "cp -r src/glsl dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -41,6 +44,8 @@
   "devDependencies": {
     "@silwalanish/tsconfig": "workspace:*",
     "@types/node": "^22.15.2",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.1.2",
     "typescript": "^5.8.3"
   },
   "author": "Anish Silwal Khatri<silwalanish@gmail.com>",

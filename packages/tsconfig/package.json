@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A package for tsconfig used in the monorepo.",
   "private": true,
+  "types": "./types",
   "publishConfig": {
     "access": "public"
   },

@@ -1,12 +1,13 @@
-type ShaderType =
-  | typeof WebGL2RenderingContext.VERTEX_SHADER
-  | typeof WebGL2RenderingContext.FRAGMENT_SHADER;
+export enum ShaderType {
+  Vertex = WebGL2RenderingContext.VERTEX_SHADER,
+  Fragment = WebGL2RenderingContext.FRAGMENT_SHADER,
+}
 
 function shaderTypeToString(type: ShaderType): string {
   switch (type) {
-    case WebGL2RenderingContext.VERTEX_SHADER:
+    case ShaderType.Vertex:
       return "VERTEX_SHADER";
-    case WebGL2RenderingContext.FRAGMENT_SHADER:
+    case ShaderType.Fragment:
       return "FRAGMENT_SHADER";
     default:
       return "UNKNOWN_SHADER_TYPE";
