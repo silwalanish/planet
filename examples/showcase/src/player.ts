@@ -2,6 +2,7 @@ import { vec3, vec4 } from "gl-matrix";
 import { Plane } from "@silwalanish/geometry";
 import { BasicMaterial } from "@silwalanish/shader";
 import { Camera, MeshComponent, SceneNode } from "@silwalanish/scene";
+import { PlayerControl } from "./playercontrol";
 
 const MAX_ACCELERATION = 100.0;
 const MAX_DECCELERATION = 0.0;
@@ -12,14 +13,13 @@ export class Player extends SceneNode {
   private _camera: Camera;
 
   private _speed: number = 0.0;
-
-  public isAccelerating: boolean = false;
-  public isDeccelerating: boolean = false;
+  private _control: PlayerControl;
 
   public constructor(camera: Camera) {
     super("player");
 
     this._camera = camera;
+    this._control = new PlayerControl();
 
     this.mesh = new MeshComponent(
       new Plane(2, 5),
@@ -27,34 +27,23 @@ export class Player extends SceneNode {
     );
   }
 
+  public get control() {
+    return this._control;
+  }
+
   public get speed() {
     return this._speed;
-  }
-
-  public neutral() {
-    this.isAccelerating = false;
-    this.isDeccelerating = false;
-  }
-
-  public accelerate() {
-    this.isAccelerating = true;
-    this.isDeccelerating = false;
-  }
-
-  public deccelerate() {
-    this.isDeccelerating = true;
-    this.isAccelerating = false;
   }
 
   public override update(deltaTime: number): void {
     super.update(deltaTime);
 
-    if (this.isAccelerating) {
+    if (this._control.isAccelerating) {
       this._speed = Math.min(
         this._speed + ACCELERATION_RATE * deltaTime,
         MAX_ACCELERATION
       );
-    } else if (this.isDeccelerating) {
+    } else if (this._control.isDeccelerating) {
       this._speed = Math.max(
         this._speed - DECCLERATION_RATE * deltaTime,
         -MAX_DECCELERATION

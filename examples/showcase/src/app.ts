@@ -15,6 +15,7 @@ import {
 } from "@silwalanish/scene";
 import { Plane } from "@silwalanish/geometry";
 import { Player } from "./player";
+import { PlayerAction } from "./playercontrol";
 
 function leftpad(s: string, width: number, char: string) {
   return s.length >= width
@@ -81,42 +82,50 @@ export class App {
     const backwardButton = document.createElement("button");
     backwardButton.className = "backward";
     backwardButton.onmousedown = () => {
-      this._player.deccelerate();
+      this._player.control.register(PlayerAction.DECCELERATE);
     };
     backwardButton.onmouseup = () => {
-      this._player.neutral();
+      this._player.control.unregister(PlayerAction.DECCELERATE);
     };
     backwardButton.ontouchstart = () => {
-      this._player.deccelerate();
+      this._player.control.register(PlayerAction.DECCELERATE);
     };
     backwardButton.ontouchend = () => {
-      this._player.neutral();
+      this._player.control.unregister(PlayerAction.DECCELERATE);
     };
     backwardButton.ontouchcancel = () => {
-      this._player.neutral();
+      this._player.control.unregister(PlayerAction.DECCELERATE);
     };
     container.appendChild(backwardButton);
 
     const forwardButton = document.createElement("button");
     forwardButton.className = "forward";
     forwardButton.onmousedown = () => {
-      this._player.accelerate();
+      this._player.control.register(PlayerAction.ACCELERATE);
     };
     forwardButton.onmouseup = () => {
-      this._player.neutral();
+      this._player.control.unregister(PlayerAction.ACCELERATE);
     };
     forwardButton.ontouchstart = () => {
-      this._player.accelerate();
+      this._player.control.register(PlayerAction.ACCELERATE);
     };
     forwardButton.ontouchend = () => {
-      this._player.neutral();
+      this._player.control.unregister(PlayerAction.ACCELERATE);
     };
     forwardButton.ontouchcancel = () => {
-      this._player.neutral();
+      this._player.control.unregister(PlayerAction.ACCELERATE);
     };
     container.appendChild(forwardButton);
 
     this._domElement.appendChild(container);
+
+    document.addEventListener("keydown", (event) => {
+      this._player.control.handleKeyDown(event.key.toUpperCase());
+    });
+
+    document.addEventListener("keyup", (event) => {
+      this._player.control.handleKeyUp(event.key.toUpperCase());
+    });
   }
 
   private _onResize(width: number, height: number) {
