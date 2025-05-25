@@ -6,3 +6,8 @@ export type { Material } from "./material";
 export type { Mesh } from "./mesh";
 export type { Transform } from "./transform";
 export type { Scene } from "./scene";
+export type { Physics2D } from "./physics2d";
+export type { PhysicsBody } from "./physicsbody";
+export type { World2D } from "./world2d";
+export type { Scene2D } from "./scene2d";
+export { Physics2DType } from "./physics2d";
