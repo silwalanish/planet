@@ -126,13 +126,7 @@ export class Renderer {
     mesh.material.setProjectionMatrix(this._gl, projectionMatrix);
     mesh.material.setViewMatrix(this._gl, viewMatrix);
 
-    const modelMatrix = mat4.create();
-    mat4.multiply(
-      modelMatrix,
-      transform.getWorldMatrix(),
-      transform.getLocalMatrix()
-    );
-    mesh.material.setModelMatrix(this._gl, modelMatrix);
+    mesh.material.setModelMatrix(this._gl, transform.getWorldMatrix());
 
     const buffer = this._prepareRenderBuffer(mesh);
     buffer.render(this._gl);
