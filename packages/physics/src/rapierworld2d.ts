@@ -3,6 +3,7 @@ import { mat4, quat, vec3 } from "gl-matrix";
 import { RigidBodyDesc, World } from "@dimforge/rapier2d";
 import {
   GameObject,
+  Physics2DJoint,
   Physics2DType,
   PhysicsBody,
   Scene2D,
@@ -10,19 +11,22 @@ import {
 } from "@silwalanish/engine";
 
 import { quatToEuler } from "./maths";
+import { PhysicsJointType } from "./physicsjoints";
 import { PhysicsShapeType } from "./physicsshapetype";
 import { RapierPhysicsBody } from "./rapierphysicsbody";
 
 const GRAVITY = -10;
 const SCALE_FACTOR = 1;
 
-export class RapierWorld2D implements World2D<PhysicsShapeType> {
+export class RapierWorld2D
+  implements World2D<PhysicsShapeType, PhysicsJointType>
+{
   private _id: string;
   private _world: World;
-  private _scene: Scene2D<PhysicsShapeType>;
+  private _scene: Scene2D<PhysicsShapeType, PhysicsJointType>;
   private _bodies: Map<string, RapierPhysicsBody>;
 
-  public constructor(scene: Scene2D<PhysicsShapeType>) {
+  public constructor(scene: Scene2D<PhysicsShapeType, PhysicsJointType>) {
     this._id = nanoid();
     this._world = new World({ x: 0, y: GRAVITY });
     this._bodies = new Map<string, RapierPhysicsBody>();
@@ -33,7 +37,35 @@ export class RapierWorld2D implements World2D<PhysicsShapeType> {
     return this._id;
   }
 
-  public createBody(gameObject: GameObject<PhysicsShapeType>): PhysicsBody {
+  public createJoint(
+    gameObject: GameObject<PhysicsShapeType, PhysicsJointType>,
+    joint: Physics2DJoint<PhysicsShapeType, PhysicsJointType>
+  ) {
+    if (!joint.bodies || joint.bodies.length < 2) {
+      throw new Error("Joint must have at least two bodies.");
+    }
+
+    const bodyA = this._bodies.get(joint.bodies[0]?.physics?.id || "");
+    const bodyB = this._bodies.get(joint.bodies[1]?.physics?.id || "");
+
+    if (!bodyA || !bodyB) {
+      throw new Error("Both bodies must exist in the world.");
+    }
+
+    const jointData = joint.jointData;
+    const rapierJoint = this._world.createImpulseJoint(
+      jointData,
+      bodyA.rigidBody,
+      bodyB.rigidBody,
+      true
+    );
+
+    gameObject.physicsBody?.addJoint(rapierJoint);
+  }
+
+  public createBody(
+    gameObject: GameObject<PhysicsShapeType, PhysicsJointType>
+  ): PhysicsBody {
     if (!gameObject.physics) {
       throw new Error("GameObject does not have a physics component.");
     }
@@ -82,7 +114,7 @@ export class RapierWorld2D implements World2D<PhysicsShapeType> {
   }
 
   private _syncPosition(
-    gameObject: GameObject<PhysicsShapeType>,
+    gameObject: GameObject<PhysicsShapeType, PhysicsJointType>,
     body: RapierPhysicsBody
   ) {
     const physicsPosition = body.rigidBody.translation();
@@ -109,7 +141,7 @@ export class RapierWorld2D implements World2D<PhysicsShapeType> {
   }
 
   private _syncRotation(
-    gameObject: GameObject<PhysicsShapeType>,
+    gameObject: GameObject<PhysicsShapeType, PhysicsJointType>,
     body: RapierPhysicsBody
   ) {
     const objectRotation = quatToEuler(
@@ -145,7 +177,10 @@ export class RapierWorld2D implements World2D<PhysicsShapeType> {
     const objects = [root];
 
     while (objects.length > 0) {
-      const gameObject = objects.pop() as GameObject<PhysicsShapeType>;
+      const gameObject = objects.pop() as GameObject<
+        PhysicsShapeType,
+        PhysicsJointType
+      >;
 
       if (gameObject.physics && this._bodies.has(gameObject.physics.id)) {
         const body = this._bodies.get(gameObject.physics.id);

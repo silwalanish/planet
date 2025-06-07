@@ -29,8 +29,8 @@ export class App {
   private _perspective: Perspective;
   private _orthographic: Orthographic;
   private _groundManager: GroundManager;
-  private _camera: Camera<any>;
-  private _sky: GameObject<any>;
+  private _camera: Camera<any, any>;
+  private _sky: GameObject<any, any>;
   private _player: Player;
   private _domElement: HTMLDivElement;
   private _speedLabel: HTMLLabelElement;

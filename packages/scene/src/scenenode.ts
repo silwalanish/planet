@@ -10,16 +10,18 @@ import {
 
 import { TransformComponent } from "./components/transformcomponent";
 
-export class SceneNode<ShapeType> implements GameObject<ShapeType> {
+export class SceneNode<ShapeType, JointType>
+  implements GameObject<ShapeType, JointType>
+{
   private _id: string;
   private _name: string;
   private _mesh: Mesh | null;
   private _transform: Transform;
-  private _children: GameObject<ShapeType>[];
-  private _physics: Physics2D<ShapeType> | null;
-  private _parent: GameObject<ShapeType> | null;
+  private _children: GameObject<ShapeType, JointType>[];
+  private _physics: Physics2D<ShapeType, JointType> | null;
+  private _parent: GameObject<ShapeType, JointType> | null;
   private _physicsBody: PhysicsBody | null;
-  private _scene: Scene<ShapeType> | null;
+  private _scene: Scene<ShapeType, JointType> | null;
 
   public constructor(name: string, id?: string) {
     this._id = id || nanoid();
@@ -33,11 +35,11 @@ export class SceneNode<ShapeType> implements GameObject<ShapeType> {
     this._transform = new TransformComponent();
   }
 
-  public get scene(): Scene<ShapeType> | null {
+  public get scene(): Scene<ShapeType, JointType> | null {
     return this._scene;
   }
 
-  public set scene(value: Scene<ShapeType> | null) {
+  public set scene(value: Scene<ShapeType, JointType> | null) {
     this._scene = value;
   }
 
@@ -49,11 +51,11 @@ export class SceneNode<ShapeType> implements GameObject<ShapeType> {
     this._physicsBody = value;
   }
 
-  get physics(): Physics2D<ShapeType> | null {
+  get physics(): Physics2D<ShapeType, JointType> | null {
     return this._physics;
   }
 
-  set physics(value: Physics2D<ShapeType> | null) {
+  set physics(value: Physics2D<ShapeType, JointType> | null) {
     this._physics = value;
   }
 
@@ -73,11 +75,11 @@ export class SceneNode<ShapeType> implements GameObject<ShapeType> {
     return this._transform;
   }
 
-  public get children(): GameObject<ShapeType>[] {
+  public get children(): GameObject<ShapeType, JointType>[] {
     return this._children;
   }
 
-  public get parent(): GameObject<ShapeType> | null {
+  public get parent(): GameObject<ShapeType, JointType> | null {
     return this._parent;
   }
 
@@ -89,7 +91,7 @@ export class SceneNode<ShapeType> implements GameObject<ShapeType> {
     this._transform = value;
   }
 
-  public set parent(value: GameObject<ShapeType> | null) {
+  public set parent(value: GameObject<ShapeType, JointType> | null) {
     this._parent = value;
     this._transform.Parent = value ? value.transform : null;
   }
@@ -108,7 +110,7 @@ export class SceneNode<ShapeType> implements GameObject<ShapeType> {
     });
   }
 
-  public addChild(child: GameObject<ShapeType>) {
+  public addChild(child: GameObject<ShapeType, JointType>) {
     if (child.parent) {
       child.parent.removeChild(child);
     }
@@ -119,7 +121,7 @@ export class SceneNode<ShapeType> implements GameObject<ShapeType> {
     this.scene?.registerNode(child);
   }
 
-  public removeChild(child: GameObject<ShapeType>) {
+  public removeChild(child: GameObject<ShapeType, JointType>) {
     const index = this.children.indexOf(child);
 
     if (index != -1) {

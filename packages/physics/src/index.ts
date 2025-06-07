@@ -1,9 +1,10 @@
 export { RapierWorld2D } from "./rapierworld2d";
 export { PhysicsScene2D } from "./physicsscene2d";
-export { RapierPhysics2D } from "./rapierphysics2d";
+export { RapierPhysics2D, RapierJoint } from "./rapierphysics2d";
 export { RapierPhysicsBody } from "./rapierphysicsbody";
 export type { PhysicsShapeType } from "./physicsshapetype";
-export { Box, Trimesh, Heightfield, Polyline } from "./physicsshapetype";
+export * from "./physicsshapetype";
+export * from "./physicsjoints";
 
 declare global {
   interface Window {

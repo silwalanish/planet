@@ -134,7 +134,7 @@ export class Renderer {
     this._renderedBuffers.push(mesh.geometry.id);
   }
 
-  public render(scene: Scene<any>, projection: Projection) {
+  public render(scene: Scene<any, any>, projection: Projection) {
     this._clear();
 
     this._gl.enable(this._gl.DEPTH_TEST);
@@ -143,10 +143,10 @@ export class Renderer {
     const projectionMatrix = projection.getProjectionMatrix();
     const viewMatrix = scene.camera.getViewMatrix();
 
-    const gameObjects: GameObject<any>[] = [scene.root];
+    const gameObjects: GameObject<any, any>[] = [scene.root];
 
     while (gameObjects.length > 0) {
-      const gameObject = gameObjects.pop() as GameObject<any>;
+      const gameObject = gameObjects.pop() as GameObject<any, any>;
 
       if (gameObject.mesh) {
         this._renderMesh(

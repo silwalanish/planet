@@ -1,6 +1,7 @@
 import { vec2, vec3, vec4 } from "gl-matrix";
 import { GameObject, Physics2DType } from "@silwalanish/engine";
 import {
+  PhysicsJointType,
   PhysicsShapeType,
   Polyline,
   RapierPhysics2D,
@@ -12,12 +13,15 @@ import { PlanetMaterial } from "./material";
 
 const LOD = vec2.fromValues(1000, 1);
 
-export class GroundManager extends SceneNode<PhysicsShapeType> {
-  private _camera: GameObject<any>;
+export class GroundManager extends SceneNode<
+  PhysicsShapeType,
+  PhysicsJointType
+> {
+  private _camera: GameObject<any, any>;
   private _planetMaterial: PlanetMaterial;
   private _offset: number;
 
-  public constructor(camera: GameObject<any>) {
+  public constructor(camera: GameObject<any, any>) {
     super("groundManager");
 
     this._camera = camera;
@@ -32,7 +36,9 @@ export class GroundManager extends SceneNode<PhysicsShapeType> {
   }
 
   private _spawnGround() {
-    const ground = new SceneNode<PhysicsShapeType>("ground" + this._offset);
+    const ground = new SceneNode<PhysicsShapeType, PhysicsJointType>(
+      "ground" + this._offset
+    );
     ground.mesh = new MeshComponent(
       new Ground(vec3.fromValues(this._offset, 0, 0), LOD, 200),
       this._planetMaterial
@@ -53,8 +59,8 @@ export class GroundManager extends SceneNode<PhysicsShapeType> {
 
     ground.physics = new RapierPhysics2D(
       Physics2DType.STATIC,
-      1000.0, // mass
-      0.0, // friction
+      0.0, // mass
+      1.0, // friction
       Polyline(verticesFloatArray)
     );
 
