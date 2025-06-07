@@ -1,11 +1,10 @@
 import { GameObject } from "./gameobject";
 import { PhysicsBody } from "./physicsbody";
 
-export interface World2D {
+export interface World2D<ShapeType> {
   get id(): string;
 
-  createBody(gameObject: GameObject): PhysicsBody;
+  createBody(gameObject: GameObject<ShapeType>): PhysicsBody;
 
-  update(deltaTime: number): void;
   physicsUpdate(): void;
 }

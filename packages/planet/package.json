@@ -20,7 +20,7 @@
   },
   "scripts": {
     "build": "tsc && pnpm copy-glsl",
-    "clean": "tsc --build --clean",
+    "clean": "tsc --build --clean && rm -rf dist",
     "watch:tsc": "tsc --watch",
     "watch:glsl": "chokidar \"src/**/*.glsl\" -c \"pnpm copy-glsl\"",
     "dev": "concurrently \"pnpm watch:tsc\" \"pnpm watch:glsl\"",
@@ -39,6 +39,7 @@
     "@silwalanish/engine": "workspace:*",
     "@silwalanish/scene": "workspace:*",
     "@silwalanish/shader": "workspace:*",
+    "@silwalanish/physics": "workspace:*",
     "alea": "^1.0.1",
     "gl-matrix": "^3.4.3",
     "nanoid": "^5.1.5",

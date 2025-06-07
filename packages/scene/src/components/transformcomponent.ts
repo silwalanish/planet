@@ -10,6 +10,8 @@ export class TransformComponent implements Transform {
   private _localMatrix: mat4;
   private _worldMatrix: mat4;
   private _worldPosition: vec3;
+  private _worldRotation: quat;
+  private _worldScale: vec3;
 
   public constructor() {
     this._position = vec3.fromValues(0, 0, 0);
@@ -19,6 +21,8 @@ export class TransformComponent implements Transform {
     this._localMatrix = mat4.create();
     this._worldMatrix = mat4.create();
     this._worldPosition = vec3.create();
+    this._worldRotation = quat.create();
+    this._worldScale = vec3.fromValues(1, 1, 1);
     this._parent = null;
 
     this.recalculate();
@@ -68,16 +72,36 @@ export class TransformComponent implements Transform {
       this._scale
     );
 
-    this._worldMatrix = this._localMatrix;
     if (this._parent) {
-      mat4.multiply(
-        this._worldMatrix,
-        this._parent.getWorldMatrix(),
-        this._localMatrix
+      vec3.transformMat4(
+        this._worldPosition,
+        this._position,
+        this._parent.getLocalMatrix()
       );
+
+      quat.multiply(
+        this._worldRotation,
+        this._parent.getWorldRotation(),
+        this._rotation
+      );
+
+      vec3.multiply(
+        this._worldScale,
+        this._parent.getWorldScale(),
+        this._scale
+      );
+    } else {
+      this._worldPosition = vec3.clone(this._position);
+      this._worldRotation = quat.clone(this._rotation);
+      this._worldScale = vec3.clone(this._scale);
     }
 
-    vec3.transformMat4(this._worldPosition, this._position, this._worldMatrix);
+    this._worldMatrix = mat4.fromRotationTranslationScale(
+      this._worldMatrix,
+      this._worldRotation,
+      this._worldPosition,
+      this._worldScale
+    );
   }
 
   public getWorldMatrix(): mat4 {
@@ -90,5 +114,13 @@ export class TransformComponent implements Transform {
 
   public getWorldPosition(): vec3 {
     return this._worldPosition;
+  }
+
+  public getWorldRotation(): quat {
+    return this._worldRotation;
+  }
+
+  public getWorldScale(): vec3 {
+    return this._worldScale;
   }
 }

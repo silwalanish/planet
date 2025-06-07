@@ -14,6 +14,8 @@ export interface Transform {
   getWorldMatrix(): mat4;
   getLocalMatrix(): mat4;
   getWorldPosition(): vec3;
+  getWorldRotation(): quat;
+  getWorldScale(): vec3;
 
   recalculate(): void;
 }

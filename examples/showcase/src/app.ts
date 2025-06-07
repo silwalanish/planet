@@ -1,19 +1,17 @@
 import { vec3, vec4 } from "gl-matrix";
+import { Plane } from "@silwalanish/geometry";
+import { GameObject } from "@silwalanish/engine";
 import { BasicMaterial } from "@silwalanish/shader";
 import { GroundManager } from "@silwalanish/planet";
+import { PhysicsScene2D } from "@silwalanish/physics";
+import { Camera, MeshComponent, SceneNode } from "@silwalanish/scene";
 import {
   CanvasSurface,
   Orthographic,
   Perspective,
   Renderer,
 } from "@silwalanish/renderer";
-import {
-  Camera,
-  MeshComponent,
-  SceneGraph,
-  SceneNode,
-} from "@silwalanish/scene";
-import { Plane } from "@silwalanish/geometry";
+
 import { Player } from "./player";
 import { PlayerAction } from "./playercontrol";
 
@@ -27,12 +25,12 @@ export class App {
   private _lastTime: number;
   private _surface: CanvasSurface;
   private _renderer: Renderer;
-  private _scene: SceneGraph;
+  private _scene: PhysicsScene2D;
   private _perspective: Perspective;
   private _orthographic: Orthographic;
   private _groundManager: GroundManager;
-  private _camera: Camera;
-  private _sky: SceneNode;
+  private _camera: Camera<any>;
+  private _sky: GameObject<any>;
   private _player: Player;
   private _domElement: HTMLDivElement;
   private _speedLabel: HTMLLabelElement;
@@ -46,13 +44,13 @@ export class App {
     });
     this._renderer = new Renderer(this._surface);
 
-    this._scene = new SceneGraph();
+    this._scene = new PhysicsScene2D();
     this._perspective = new Perspective(90, 1.33, 0.01, 1000);
-    this._orthographic = new Orthographic(-50, 50, -50, 50, 0.01, 1000);
+    this._orthographic = new Orthographic(-50, 50, 0, 100, 0.01, 1000);
     this._camera = new Camera("activeCamera");
     this._groundManager = new GroundManager(this._camera);
     this._sky = new SceneNode("sky");
-    this._player = new Player(this._camera);
+    this._player = new Player();
 
     this._speedLabel = document.createElement("label");
 
@@ -146,7 +144,7 @@ export class App {
     this._scene.camera = this._camera;
 
     this._sky.mesh = new MeshComponent(
-      new Plane(150, 100),
+      new Plane(150, 400),
       new BasicMaterial("skyMaterial", vec4.fromValues(0.5, 0.7, 1, 1))
     );
     this._sky.transform.Position = vec3.fromValues(0, 0, -20);
@@ -173,8 +171,17 @@ export class App {
         3,
         "0"
       );
+      this._scene.physicsUpdate();
+
       this._scene.update(deltaTime);
       this._renderer.render(this._scene, this._orthographic);
+
+      this._camera.transform.Position = vec3.fromValues(
+        this._player.transform.getWorldPosition()[0],
+        this._camera.transform.Position[1],
+        this._camera.transform.Position[2]
+      );
+      this._camera.lookAt(vec3.fromValues(0, 0, -1));
     }
 
     window.requestAnimationFrame(() => {

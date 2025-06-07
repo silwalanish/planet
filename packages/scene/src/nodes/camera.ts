@@ -5,7 +5,7 @@ import { SceneNode } from "../scenenode";
 
 const UP: vec3 = vec3.fromValues(0, 1, 0);
 
-export class Camera extends SceneNode implements View {
+export class Camera<ShapeType> extends SceneNode<ShapeType> implements View {
   private _viewMatrix: mat4;
 
   public constructor(name: string) {

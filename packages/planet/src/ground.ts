@@ -5,7 +5,6 @@ import { Geometry } from "@silwalanish/engine";
 import { createNoise2D, NoiseFunction2D } from "simplex-noise";
 
 const SIZE = { x: 100, y: 20 };
-const LOD = vec2.fromValues(1000, 1);
 
 function fbm(
   x: number,
@@ -43,11 +42,11 @@ export class Ground implements Geometry {
   private _height: number;
   private _noise: NoiseFunction2D;
 
-  constructor(offset: vec3, seed: number) {
+  public constructor(offset: vec3, lod: vec2, seed: number) {
     this._id = nanoid();
     this._noise = createNoise2D(alea(seed));
 
-    this._lod = LOD;
+    this._lod = lod;
     this._width = SIZE.x;
     this._height = SIZE.y;
     this._offset = offset;
@@ -100,39 +99,39 @@ export class Ground implements Geometry {
     }
   }
 
-  get id(): string {
+  public get id(): string {
     return this._id;
   }
 
-  get vertices(): vec3[] {
+  public get vertices(): vec3[] {
     return this._vertices;
   }
 
-  set vertices(value: vec3[]) {
+  public set vertices(value: vec3[]) {
     this._vertices = value;
   }
 
-  get normals(): vec3[] {
+  public get normals(): vec3[] {
     return this._normals;
   }
 
-  set normals(value: vec3[]) {
+  public set normals(value: vec3[]) {
     this._normals = value;
   }
 
-  get uvs(): vec2[] {
+  public get uvs(): vec2[] {
     return this._uvs;
   }
 
-  set uvs(value: vec2[]) {
+  public set uvs(value: vec2[]) {
     this._uvs = value;
   }
 
-  get indices(): number[] {
+  public get indices(): number[] {
     return this._indices;
   }
 
-  set indices(value: number[]) {
+  public set indices(value: number[]) {
     this._indices = value;
   }
 }

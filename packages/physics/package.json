@@ -1,7 +1,7 @@
 {
-  "name": "@silwalanish/geometry",
+  "name": "@silwalanish/physics",
   "version": "0.0.1",
-  "description": "A package to manage basic geometry.",
+  "description": "Contains the physics for game engine.",
   "type": "module",
   "exports": {
     ".": {
@@ -32,11 +32,6 @@
     "type": "git",
     "url": "git+github.com:silwalanish/planet.git"
   },
-  "dependencies": {
-    "@silwalanish/engine": "workspace:*",
-    "gl-matrix": "^3.4.3",
-    "nanoid": "^5.1.5"
-  },
   "devDependencies": {
     "@silwalanish/tsconfig": "workspace:*",
     "@types/node": "^22.15.2",
@@ -44,5 +39,12 @@
   },
   "author": "Anish Silwal Khatri<silwalanish@gmail.com>",
   "license": "MIT",
-  "packageManager": "pnpm@10.9.0"
+  "packageManager": "pnpm@10.9.0",
+  "dependencies": {
+    "@dimforge/rapier2d": "^0.17.1",
+    "@silwalanish/engine": "workspace:*",
+    "@silwalanish/scene": "workspace:*",
+    "gl-matrix": "^3.4.3",
+    "nanoid": "^5.1.5"
+  }
 }

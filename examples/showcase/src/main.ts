@@ -1,7 +1,11 @@
 import "./app.css";
 import { App } from "./app";
 
-window.addEventListener("DOMContentLoaded", () => {
+import { initPhysics } from "@silwalanish/physics";
+
+initPhysics();
+
+window.addEventListener("rapierLoaded", () => {
   const element = document.getElementById("app");
   if (!element) {
     throw new Error("Element with id 'app' not found");

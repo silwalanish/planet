@@ -1,13 +1,16 @@
 import { View } from "./view";
 import { GameObject } from "./gameobject";
 
-export interface Scene {
+export interface Scene<ShapeType> {
   get id(): string;
-  get root(): GameObject;
+  get root(): GameObject<ShapeType>;
   get camera(): View;
   set camera(value: View);
-  set root(value: GameObject);
+  set root(value: GameObject<ShapeType>);
 
   update(deltaTime: number): void;
-  addNode(node: GameObject): void;
+  physicsUpdate(): void;
+
+  registerNode(node: GameObject<ShapeType>): void;
+  addNode(node: GameObject<ShapeType>): void;
 }

@@ -1,15 +1,23 @@
-import { vec3, vec4 } from "gl-matrix";
+import { vec2, vec3, vec4 } from "gl-matrix";
+import { GameObject, Physics2DType } from "@silwalanish/engine";
+import {
+  PhysicsShapeType,
+  Polyline,
+  RapierPhysics2D,
+} from "@silwalanish/physics";
 import { MeshComponent, SceneNode } from "@silwalanish/scene";
 
 import { Ground } from "./ground";
 import { PlanetMaterial } from "./material";
 
-export class GroundManager extends SceneNode {
-  private _camera: SceneNode;
+const LOD = vec2.fromValues(1000, 1);
+
+export class GroundManager extends SceneNode<PhysicsShapeType> {
+  private _camera: GameObject<any>;
   private _planetMaterial: PlanetMaterial;
   private _offset: number;
 
-  public constructor(camera: SceneNode) {
+  public constructor(camera: GameObject<any>) {
     super("groundManager");
 
     this._camera = camera;
@@ -24,16 +32,30 @@ export class GroundManager extends SceneNode {
   }
 
   private _spawnGround() {
-    const ground = new SceneNode("ground" + this._offset);
+    const ground = new SceneNode<PhysicsShapeType>("ground" + this._offset);
     ground.mesh = new MeshComponent(
-      new Ground(vec3.fromValues(this._offset, 0, 0), 200),
+      new Ground(vec3.fromValues(this._offset, 0, 0), LOD, 200),
       this._planetMaterial
     );
-    ground.transform.Position = vec3.fromValues(
-      (this.children[0]?.transform.Position[0] || 0) +
-        this.children.length * 50,
-      -20,
-      0
+    ground.transform.Position = vec3.fromValues(this._offset * 100, 0, 0);
+
+    const vertices = ground.mesh.geometry.vertices;
+    const verticesFloatArray = new Float32Array((LOD[0] + 2) * 2);
+    let index = 0;
+    for (let i = LOD[1] + 1; i < vertices.length; i += 3) {
+      const vertex = vertices[i] as vec3;
+
+      verticesFloatArray[index] = vertex[0];
+      verticesFloatArray[index + 1] = vertex[1];
+
+      index += 2;
+    }
+
+    ground.physics = new RapierPhysics2D(
+      Physics2DType.STATIC,
+      1000.0, // mass
+      0.0, // friction
+      Polyline(verticesFloatArray)
     );
 
     this.addChild(ground);
@@ -49,10 +71,10 @@ export class GroundManager extends SceneNode {
   public override update(deltaTime: number): void {
     super.update(deltaTime);
 
-    let cameraX = Math.ceil(this._camera.transform.Position[0]);
+    let cameraX = Math.ceil(this._camera.transform.getWorldPosition()[0]);
 
     const offScreenChildren = this.children.filter((children) => {
-      return cameraX - children.transform.Position[0] > 50;
+      return cameraX - children.transform.getWorldPosition()[0] > 150;
     });
 
     offScreenChildren.forEach((children) => {

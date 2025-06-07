@@ -20,7 +20,7 @@
   },
   "scripts": {
     "build": "tsc && pnpm copy-glsl",
-    "clean": "tsc --build --clean",
+    "clean": "tsc --build --clean && rm -rf dist",
     "watch:tsc": "tsc --watch",
     "watch:glsl": "chokidar \"src/**/*.glsl\" -c \"pnpm copy-glsl\"",
     "dev": "concurrently \"pnpm watch:tsc\" \"pnpm watch:glsl\"",
